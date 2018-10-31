@@ -7,9 +7,9 @@ RUN mkdir -p /usr/share/man/man1 && \
 RUN mkdir /FitNesse \
   && curl -fsSL -o fitnesse-standalone.jar "http://www.fitnesse.org/fitnesse-standalone.jar?responder=releaseDownload&release=20180127"
 
-EXPOSE 80
+EXPOSE 7080
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-CMD java -Xmx256m -jar fitnesse-standalone.jar
+CMD java -Xmx256m -jar fitnesse-standalone.jar -p 7080
