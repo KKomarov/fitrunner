@@ -1,0 +1,11 @@
+---
+Test
+---
+!define TEST_SYSTEM (SLIM)
+
+!| Import         |
+|fitnesse.fixtures|
+  
+!| fitnesse.slim.test.Sleep|
+|Timer    |do Sleep ?      |
+|10000    |WakeUp 10000    |
