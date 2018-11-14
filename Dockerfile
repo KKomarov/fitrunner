@@ -13,3 +13,5 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 CMD java -Xmx256m -jar fitnesse-standalone.jar -p 7080
+
+USER 1000:1000
