@@ -1,11 +1,11 @@
-FROM python:3.7.1-stretch
+FROM python:3.8
 
 RUN mkdir -p /usr/share/man/man1 && \
     apt-get update && apt-get install -y --no-install-recommends \
     default-jre
 
 RUN mkdir /FitNesse \
-  && curl -fsSL -o fitnesse-standalone.jar "http://www.fitnesse.org/fitnesse-standalone.jar?responder=releaseDownload&release=20180127"
+  && curl -fsSL -o fitnesse-standalone.jar "http://www.fitnesse.org/fitnesse-standalone.jar?responder=releaseDownload&release=20200501"
 
 EXPOSE 7080
 

@@ -14,17 +14,13 @@ class SingleTest:
         self.test_command = "%s&format=text" % self.resource
         self.resource = self.resource.split('?')[0]
         self.id = None
-        self.started = None
-        self.runs = 0
         self.status = 'new'
 
     def set_test(self, test_name):
         pass
 
     async def run(self):
-        self.runs += 1
-        print("Trying to run test: %s, Attempt: %s" % (self.resource, self.runs))
-        self.started = datetime.datetime.now()
+        print(f"Trying to run test: {self.resource}")
         url = self.fit.get_url(self.test_command)
         try:
             async with aiohttp.ClientSession() as session:
@@ -47,10 +43,6 @@ class SingleTest:
     def stop(self):
         print("Trying to stop test: %s, id: %s" % (self.resource, self.id))
         self.fit.send('{%s?responder=stoptest&id=%s' % (self.resource, self.id))
-
-    def duration(self):
-        if self.started is not None:
-            return (datetime.datetime.now() - self.started).seconds
 
     def fail(self):
         self.status = 'fail'

@@ -1,38 +1,40 @@
 import asyncio
+import aiohttp
 import pytest
 from fitnesse import Fitnesse
 from signle_test import SingleTest
 
 
-@pytest.yield_fixture(scope='session')
-def fitnesse():
-    ft = Fitnesse(1)
-    print('Fitnesse setup')
-    yield ft
-    # stop here
-    print('Fitnesse close')
-    ft.close()
+@pytest.fixture(scope='session')
+def event_loop(request):
+    """Create an instance of the default event loop for entire run."""
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
 
 
-@pytest.yield_fixture(scope='function')
-def teardown(fitnesse):
-    single_test = SingleTest(fitnesse, '')
-    print('test setup')
-    yield single_test
-    print(teardown)
+@pytest.fixture(scope='session')
+async def fitnesse():
+    print(id(asyncio.get_event_loop()))
+    async with aiohttp.ClientSession() as session:
 
+        ft = Fitnesse(session, host='http://kkrmaz.rmadproject.org:7080')
+        print('Fitnesse setup')
+        yield ft
+        # stop here
 
-# another fixture for teardown
+        print('Fitnesse close')
+
 
 @pytest.mark.parametrize('test_name', [
     'FrontPage.TenSeconds',
-    'FrontPage.TenSeconds2',
+    'FrontPage.TenSeconds',
 ])
+@pytest.mark.async_timeout(5)
 @pytest.mark.asyncio
-async def test_a(teardown, test_name):
-    teardown.set_test(test_name)
-    print('https://asdfas')
-    await asyncio.sleep(1)
-    assert False
+async def test_a(fitnesse, test_name):
+    print(id(asyncio.get_event_loop()))
+    test = await fitnesse.run_test(test_name)
+    print('test result:', test)
 
-
+# add test pytest.fail() shut downs tests gracefully
