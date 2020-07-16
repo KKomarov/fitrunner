@@ -31,7 +31,7 @@ async def fitnesse():
     'FrontPage.TenSeconds',
 ])
 @pytest.mark.async_timeout(5)
-@pytest.mark.asyncio
+# @pytest.mark.asyncio
 async def test_a(fitnesse, test_name):
     print(id(asyncio.get_event_loop()))
     test = await fitnesse.run_test(test_name)
